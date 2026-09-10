@@ -41,7 +41,7 @@
 - `projects/<نام>/briefs/` — متن‌های آمادهٔ دستور برای جلسه‌های سازندهٔ
   همان پروژه. هرکدام دست‌نخورده کپی می‌شود.
 - بقیهٔ سندهای هر پروژه هم کنار دفتر خودش می‌نشیند — مثل
-  `projects/chortke/dour-shekl.md` و `projects/chortke/research/`.
+  `projects/chortke/briefs/`.
 - `.claude/skills/` — مهارت‌های این اتاق. فعلاً یکی: `slash-commands`.
 
 ## پروژه‌های تحت نظر
