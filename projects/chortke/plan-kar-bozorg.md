@@ -422,6 +422,26 @@ cd /root/chortke && git fetch origin main && git merge --ff-only origin/main && 
 rm -rf /srv/chortke/* && cp -a /srv/chortke.bak/. /srv/chortke/ && ls /srv/chortke
 ```
 
+### وقتی فقط `server/` عوض شده — بی ساخت اپ، ثبت‌شده در ۲۰ شهریور
+
+بندهای چهل‌وهشت تا پنجاه فقط سرور را عوض کردند. یک‌خطیِ بالا اپ را
+دوباره می‌سازد و پوشهٔ مقصد را پاک می‌کند — کاری بی‌فایده با یک ریسک
+بی‌دلیل، وقتی `app/` در دیف نیست. برای این حالت:
+
+```
+cd /root/chortke && git fetch origin main && git merge --ff-only origin/main && systemctl restart chortke && sleep 2 && systemctl is-active chortke && curl -s 127.0.0.1:8600/api/health && echo " == DONE ==" && git log --oneline -1
+```
+
+در شات باید چهار چیز دیده شود: `active`، `{"ok":true}`، `== DONE ==`، و
+شمارهٔ کامیتِ merge آخر. اگر `package.json` سرور در دیف بود، پیش از
+ری‌استارت `cd server && npm ci --silent && cd ..` هم می‌آید.
+
+راه برگشت:
+
+```
+cd /root/chortke && git reset --hard ORIG_HEAD && systemctl restart chortke && systemctl is-active chortke
+```
+
 ### دو نکته که به مالک باید گفته شود
 
 - **اپ را در تلگرام کامل ببندد و باز کند**، نه فقط برگردد.
