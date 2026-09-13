@@ -442,6 +442,29 @@ cd /root/chortke && git fetch origin main && git merge --ff-only origin/main && 
 cd /root/chortke && git reset --hard ORIG_HEAD && systemctl restart chortke && systemctl is-active chortke
 ```
 
+### وقتی هر دو نیمه عوض شده‌اند — ثبت‌شده در ۲۳ شهریور
+
+**وقتی چند بند روی هم انباشته شده‌اند، معمولاً همین حالت است.** دو
+یک‌خطیِ بالا را پشت سر هم نزن — هر کدام جداگانه `git merge` می‌کند و
+دومی روی مخزنی می‌افتد که اولی قبلاً جلو برده، پس `merge` دوم هیچ کاری
+نمی‌کند و اگر کسی خروجی را نخواند خیال می‌کند ری‌استارت روی کد تازه
+نشسته. یکی از اول تا آخر:
+
+```
+cd /root/chortke && git fetch origin main && git merge --ff-only origin/main && cd app && npm ci --silent && npm run build && rm -rf /srv/chortke.bak && cp -a /srv/chortke /srv/chortke.bak && rm -rf /srv/chortke/* && cp -a dist/. /srv/chortke/ && systemctl restart chortke && sleep 2 && systemctl is-active chortke && curl -s 127.0.0.1:8600/api/health && echo " == DONE ==" && ls /srv/chortke && git log --oneline -1 && df -h / | tail -1
+```
+
+**ترتیبش عمدی است:** ساخت پیش از هر پاک‌کردنی موفق می‌شود، نسخهٔ
+پشتیبان پیش از پاک‌کردن گرفته می‌شود، و ری‌استارت بعد از نشستنِ
+فایل‌های تازه می‌آید.
+
+در شات باید پنج چیز دیده شود: `active`، سپس `{"ok":true}`، سپس
+`== DONE ==`، سپس همان چهار نامِ `assets` و `brand` و `fonts` و
+`index.html`، و آخر شمارهٔ کامیتِ merge.
+
+راه برگشت همان دوتای بالاست، پشت سر هم: اول فایل‌های اپ از `bak`
+برگردند، بعد `git reset --hard ORIG_HEAD` و ری‌استارت.
+
 ### دو نکته که به مالک باید گفته شود
 
 - **اپ را در تلگرام کامل ببندد و باز کند**، نه فقط برگردد.
